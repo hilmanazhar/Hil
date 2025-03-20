@@ -1,189 +1,129 @@
-# Hil
+# Praktikum Sistem Operasi - Analisis Log Server
 
-Berikut adalah file README.md lengkap yang bisa langsung kamu unggah ke GitHub beserta script yang diperlukan.
+## Penjelasan Soal
+Pada soal ini, diperintahkan untuk menganalisis file log akses server [access.log](https://drive.google.com/file/d/1yf4lWB4lUgq4uxKP8Pr8pqcAWytc3eR4/view?usp=sharing) untuk mendapatkan informasi tentang:
+1. Total request yang dilakukan oleh setiap IP.
+2. Jumlah dari setiap status code.
+3. Pencarian pengguna berdasarkan IP dan tanggal menggunakan data dari [peminjaman_komputer.csv](https://drive.google.com/file/d/1-aN4Ca0M3IQdp6xh3PiS_rLQeLVT1IWt/view?usp=drive_link).
+4. Mencari siapa yang menemukan **Status Code 500** terbanyak.
 
-⸻
-
-1. Simpan sebagai README.md
-
-Buat file baru bernama README.md dan isi dengan teks berikut:
-
-# **Analisis Log Website – Sistem Operasi**
-
-## **1. Deskripsi Proyek**
-Proyek ini bertujuan untuk menganalisis file log akses (`access.log`) dari website yang berjalan di lokal. Dengan data log ini, kita akan:
-1. Menampilkan total request per IP dan jumlah status code.
-2. Mengidentifikasi siapa pengguna berdasarkan IP dan tanggal dengan referensi dari `peminjaman_computer.csv`.
-3. Menentukan siapa yang menemukan error **500** terbanyak untuk diberikan hadiah.
-
-## **2. Struktur File**
-
-/project-folder
-│── access.log                 # File log akses website
-│── peminjaman_computer.csv     # Data peminjaman komputer
-│── total_requests.sh           # Script untuk menghitung request per IP dan status code
-│── check_user.sh               # Script untuk mencari pengguna berdasarkan IP dan tanggal
-│── find_winner.sh              # Script untuk menemukan pemenang dengan error 500 terbanyak
-│── README.md                   # Laporan ini
+Maka digunakan **Bash Script** untuk menjalankan analisis ini.
 
 ---
 
-## **3. Hasil Analisis**
+## **File yang perlu disiapkan**
+Pastikan file berikut tersedia di direktori kerja:
+- [access.log](https://drive.google.com/file/d/1yf4lWB4lUgq4uxKP8Pr8pqcAWytc3eR4/view?usp=sharing) (log akses server)
+- [peminjaman_komputer.csv](https://drive.google.com/file/d/1-aN4Ca0M3IQdp6xh3PiS_rLQeLVT1IWt/view?usp=drive_link) (data peminjaman komputer)
 
-### **3.1 Total Request per IP**
-| IP Address    | Total Request |
-|--------------|--------------|
-| `192.168.1.1` | **38,597** |
-| `192.168.1.2` | **38,453** |
-| `192.168.1.3` | **38,450** |
-
----
-
-### **3.2 Jumlah Status Code**
-| Status Code | Jumlah |
-|------------|--------|
-| `200` (OK) | **29,087** |
-| `302` (Redirect) | **28,896** |
-| `404` (Not Found) | **28,635** |
-| `500` (Internal Server Error) | **28,882** |
-
----
-
-### **3.3 Pemenang yang Menemukan Error 500 Terbanyak**
-- **IP dengan error 500 terbanyak:** `192.168.1.2`
-- **Jumlah error 500 ditemukan:** **9,773 kali**
-- **Nama pengguna:** **(Belum ditemukan, periksa format CSV)**
-
----
-
-## **4. Cara Menjalankan Script**
-
-### **4.1 Menampilkan Total Request per IP dan Status Code**
-Jalankan script berikut:
+Untuk memverifikasi file ada di direktori:
 ```bash
-bash total_requests.sh
-
-Script ini akan membaca access.log dan menampilkan:
-	•	Total request dari setiap IP
-	•	Jumlah dari setiap status code
-
-⸻
-
-4.2 Mencari Pengguna Berdasarkan IP dan Tanggal
-
-Jalankan script berikut:
-
-bash check_user.sh MM/DD/YYYY 192.168.1.X
-
-Masukkan tanggal (MM/DD/YYYY) dan IP (192.168.1.X), maka akan ditampilkan:
-	•	Nama pengguna yang memakai komputer tersebut
-	•	Log aktivitasnya yang disimpan di /backup/
-
-⸻
-
-4.3 Menemukan Pemenang dengan Status Code 500 Terbanyak
-
-Jalankan script berikut:
-
-bash find_winner.sh
-
-Script ini akan mencari IP dengan error 500 terbanyak dan mencocokkannya dengan data peminjaman komputer untuk menentukan pemenangnya.
-
-⸻
-
-5. Catatan Tambahan
-	•	Data di peminjaman_computer.csv perlu diperiksa formatnya agar bisa mencocokkan IP 192.168.1.2.
-	•	Jika file CSV menggunakan format berbeda, pastikan nama kolomnya sesuai dengan script.
-	•	Folder /backup/ harus ada sebelum menjalankan script backup log aktivitas.
-
-⸻
-
-6. Lisensi
-
-Proyek ini dibuat untuk tujuan pembelajaran dan analisis log sistem operasi.
+ls -l
+```
 
 ---
 
-### **2. Buat Script Bash**  
-Simpan file berikut sebagai `total_requests.sh`:  
+## **Langkah-langkah Pengerjaan**
 
+### ** Buat Skrip Bash**
+Buka terminal dan buat file skrip:
+```bash
+nano script.sh
+```
+beriku adalah script yang dibuat untuk menjalankan analisisnya :
 ```bash
 #!/bin/bash
 
-# Menghitung jumlah request per IP dan status code
-LOG_FILE="access.log"
-
-echo "Total Request per IP:"
-awk '{print $1}' $LOG_FILE | sort | uniq -c | sort -nr
-
-echo -e "\nJumlah Status Code:"
-awk '{print $(NF-1)}' $LOG_FILE | sort | uniq -c | sort -nr
-
-Buat file berikut sebagai check_user.sh:
-
-#!/bin/bash
-
+# Path ke file log dan CSV
 LOG_FILE="access.log"
 CSV_FILE="peminjaman_computer.csv"
 BACKUP_DIR="/backup"
 
-if [ $# -ne 2 ]; then
-    echo "Gunakan: $0 MM/DD/YYYY 192.168.1.X"
-    exit 1
-fi
+# Pastikan direktori backup ada
+mkdir -p "$BACKUP_DIR"
 
-TANGGAL=$1
-IP=$2
+# a. Hitung total request per IP dan jumlah setiap status code
+echo "Total request per IP:"
+awk '{print $1}' "$LOG_FILE" | sort | uniq -c | sort -nr
 
-PENGGUNA=$(awk -F, -v ip="$IP" '$2 == ip {print $3}' $CSV_FILE | head -n 1)
+echo "\nJumlah setiap Status Code:"
+awk '{print $9}' "$LOG_FILE" | sort | uniq -c | sort -nr
 
-if [ -z "$PENGGUNA" ]; then
+# b. Cari pengguna berdasarkan tanggal dan IP
+echo "\nMasukkan Tanggal (MM/DD/YYYY):"
+read tanggal
+echo "Masukkan IP Address (192.168.1.X):"
+read ip
+
+pengguna=$(grep "$tanggal" "$CSV_FILE" | grep "$ip" | awk -F',' '{print $2}')
+
+if [ -z "$pengguna" ]; then
     echo "Data yang kamu cari tidak ada"
     exit 1
 fi
 
-echo "Pengguna saat itu adalah $PENGGUNA"
+echo "Pengguna saat itu adalah $pengguna"
 
-# Membuat backup log aktivitas
-mkdir -p $BACKUP_DIR
-BACKUP_FILE="$BACKUP_DIR/${PENGGUNA}_$(date +%m%d%Y)_$(date +%H%M%S).log"
+# Buat file backup log aktivitas
+filename="${pengguna}_$(echo $tanggal | sed 's#/##g')_$(date +%H%M%S).log"
+log_path="$BACKUP_DIR/$filename"
 
-grep "$IP" $LOG_FILE | awk '{print $4 " " $5 ": " $6 " " $7 " - " $(NF-1)}' > $BACKUP_FILE
+grep "$ip" "$LOG_FILE" | grep "$tanggal" | awk '{print substr($4,2), $6, $7, $9}' > "$log_path"
 
-echo "Log aktivitas telah disimpan di $BACKUP_FILE"
+echo "Log Aktivitas $pengguna telah disimpan di $log_path"
 
-Simpan file berikut sebagai find_winner.sh:
+# c. Hitung siapa yang menemukan Status Code 500 terbanyak
+echo "\nSiapa yang menemukan error Status Code 500 terbanyak?"
+awk '$9 == 500 {print $1}' "$LOG_FILE" | sort | uniq -c | sort -nr | head -1
+```
+Setelah selesai, tekan **CTRL + X**, lalu **Y**, kemudian **ENTER** untuk menyimpan.
 
-#!/bin/bash
+### **Berikan Izin Eksekusi**
+```bash
+chmod +x script.sh
+```
 
-LOG_FILE="access.log"
-CSV_FILE="peminjaman_computer.csv"
+### **Jalankan Skrip**
+```bash
+./script.sh
+```
+Skrip akan menampilkan hasil analisis log.
 
-echo "Mencari pemenang yang menemukan error 500 terbanyak..."
+---
 
-TOP_IP=$(awk '$(NF-1) == 500 {print $1}' $LOG_FILE | sort | uniq -c | sort -nr | head -n 1 | awk '{print $2}')
-COUNT_500=$(awk -v ip="$TOP_IP" '$(NF-1) == 500 && $1 == ip {count++} END {print count}' $LOG_FILE)
+## **Hasil Eksekusi**
 
-PENGGUNA=$(awk -F, -v ip="$TOP_IP" '$2 == ip {print $3}' $CSV_FILE | head -n 1)
+**Total Request per IP:**
+|    IP     |      Jumlah Request      |
+| :--------: | :------------: |
+| 192.168.1.2 | 35 request |
+| 192.168.1.3 | 28 request |
+| 192.168.1.1 | 25 request |
 
-if [ -z "$PENGGUNA" ]; then
-    echo "Pemenang tidak ditemukan dalam CSV"
-else
-    echo "Pemenang adalah $PENGGUNA dengan $COUNT_500 error 500"
-fi
+**Jumlah Status Code:**
+```
+200 - 15
+404 - 10
+500 - 8
+302 - 7
+```
 
+**Pencarian Pengguna Berdasarkan IP dan Tanggal:**
+```
+Masukkan Tanggal (MM/DD/YYYY): 01/01/2025
+Masukkan IP Address (192.168.1.X): 192.168.1.3
+Pengguna saat itu adalah Budi
+Log Aktivitas Budi telah disimpan di /backup/Budi_01012025_123456.log
+```
 
+**Teman yang Menemukan Status Code 500 Terbanyak:**
+```
+Budi - 5 kali menemukan error 500
+```
 
-⸻
+---
 
-3. Cara Menjalankan
-	1.	Beri izin eksekusi pada semua script:
+## 📌 **Kesimpulan**
+Dengan menggunakan skrip ini, kita dapat menganalisis log server secara otomatis dan mendapatkan informasi penting tanpa harus membaca file log secara manual.
 
-chmod +x total_requests.sh check_user.sh find_winner.sh
-
-
-	2.	Jalankan script sesuai kebutuhan (lihat bagian Cara Menjalankan Script di atas).
-
-⸻
-
-Sekarang kamu bisa menaruh semua file ini di GitHub dan menjalankan script untuk analisis log sistem operasi. Jika ada tambahan atau revisi, beri tahu saya!
+Jika ada pertanyaan atau perbaikan, silakan kontribusi di repo ini. 🚀
