@@ -1,6 +1,6 @@
 # Laporan Praktikum Sistem Operasi
 
-- [Task 2 - Liburan Bersama Rudi _(Holiday with Rudi)_](/task 2/)
+- [Task 2 - Liburan Bersama Rudi _(Holiday with Rudi)_](/task2/)
 
 ## Deskripsi
 Tugas ini bertujuan untuk menganalisis file log akses website Rudi dan mengolahnya menggunakan script Bash. Ada tiga bagian utama dalam tugas ini:
