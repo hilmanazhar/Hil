@@ -1,23 +1,29 @@
 # Laporan Praktikum Sistem Operasi
 
 
-## Deskripsi
-Tugas ini bertujuan untuk menganalisis file log akses website Rudi dan mengolahnya menggunakan script Bash. Ada tiga bagian utama dalam tugas ini:
+## Penjelasan soal
+Rudi membuat website untuk personal branding yang berjalan secara lokal di komputer laboratorium. Karena sering mengalami error, ia meminta bantuan tiga temannya: Andi, Budi, dan Caca untuk mengecek log aksesnya. Praktikum ini bertujuan untuk menganalisis file `access.log` dan `peminjaman_computer.csv` untuk mendapatkan informasi berikut:
 
-1. **Menampilkan total request per IP dan jumlah dari setiap status code.**
-2. **Mencari pengguna yang mengalami error dan menyimpan log aktivitas mereka.**
-3. **Menentukan siapa yang menemukan error status code 500 terbanyak.**
+1. **(A)** Total request dari setiap IP dan jumlah setiap status code.
+2. **(B)** Mencari pengguna komputer berdasarkan tanggal dan IP serta menyimpan log aktivitas.
+3. **(C)** Menemukan siapa yang menemukan error `Status Code 500` terbanyak dan menentukan pemenang hadiah.
 
 ---
 
 ## Langkah-langkah Pengerjaan
 
-### 1. Menampilkan Total Request per IP dan Jumlah Status Code
-#### Command:
-```bash
-./rudi-a.sh
-```
-#### Script `rudi-a.sh`
+### Data yang perlu disiapkan
+- Download file yang dibutuhkan:
+  - `access.log` (log akses dari website Rudi)
+  - `peminjaman_computer.csv` (data peminjaman komputer)
+- Pastikan kedua file disimpan dalam direktori yang akan digunakan.
+- Tiga file script Bash yang akan dibuat :
+  - `rudi-a.sh` → Untuk analisis total request dan status code.
+  - `rudi-b.sh` → Untuk mencari pengguna komputer dan menyimpan log aktivitas.
+  - `rudi-c.sh` → Untuk menentukan pemenang berdasarkan status code `500`.
+---
+### **(A) Menampilkan Total Request per IP & Jumlah Status Code**
+#### **Script: `rudi-a.sh`**
 ```bash
 #!/bin/bash
 awk '{print $1}' access.log | sort | uniq -c | sort -nr > ip_count.txt
@@ -27,7 +33,9 @@ cat ip_count.txt
 echo "Jumlah setiap status code:"
 cat status_count.txt
 ```
-#### Hasil Output:
+#### **Penjelasan Code**
+
+#### **Output Contoh:**
 ```
 Total request per IP:
   38597 192.168.1.1
@@ -39,11 +47,10 @@ Jumlah setiap status code:
   28882 500
   28635 404
 ```
-
 ---
 
-### 2. Mencari Pengguna yang Mengalami Error dan Membuat Backup Log
-#### Command:
+### **(B) Mencari Pengguna Berdasarkan IP & Tanggal dan Membuat Backup Log**
+#### **Script: `rudi-b.sh`**
 ```bash
 ./rudi-b.sh
 ```
@@ -69,31 +76,48 @@ log_file="/backup/${user}_$(echo $date | tr -d '/')_$(date +%H%M%S).log"
 grep "$ip" access.log | awk '{print $4 " " $6 " " $7 " " $9}' > "$log_file"
 echo "Log Aktivitas $user telah disimpan di $log_file"
 ```
-#### Hasil Output:
+
+#### **Penjelasan Code**
+
+
+#### **Output Contoh:**
 ```
 Masukkan Tanggal (MM/DD/YYYY): 01/01/2025
 Masukkan IP Address (192.168.1.3): 3
 Pengguna saat itu adalah Caca
 Log Aktivitas Caca telah disimpan di /backup/Caca_01012025_215820.log
 ```
-
 ---
 
-### 3. Menentukan Teman yang Menemukan Status Code 500 Terbanyak
-#### Command:
-```bash
-./rudi-c.sh
-```
-#### Script `rudi-c.sh`
-```bash
+### **(C) Menentukan Pemenang dengan Status Code 500 Terbanyak**
+#### **Script: `rudi-c.sh`**
 #!/bin/bash
+
+LOG_FILE="access.log"
+CSV_FILE="peminjaman_computer.csv"
+
 echo "Siapa yang menemukan error Status Code 500 terbanyak?"
-awk '$9 == 500 {print $1}' access.log | sort | uniq -c | sort -nr | head -n 1
-```
-#### Hasil Output:
+
+# Hitung jumlah Status Code 500 per IP
+top_ip=$(grep " 500 " "$LOG_FILE" | awk '{print $1}' | sort | uniq -c | sort -nr | head -n 1)
+
+jumlah=$(echo "$top_ip" | awk '{print $1}')
+ip_pemenang=$(echo "$top_ip" | awk '{print $2}')
+
+# Konversi IP ke nomor komputer
+nomor_komputer=$(echo "$ip_pemenang" | awk -F'.' '{print $4}')
+
+# Cari pengguna berdasarkan nomor komputer
+pemenang=$(awk -F',' -v komputer="$nomor_komputer" '$2 == komputer {print $3}' "$CSV_FILE" | head -n 1)
+
+echo "Pemenangnya adalah $pemenang dari komputer $nomor_komputer ($ip_pemenang), menemukan $jumlah error."
+
+#### **Penjelasan Code**
+
+#### **Output Contoh:**
 ```
 Siapa yang menemukan error Status Code 500 terbanyak?
-   9773 192.168.1.2
+Pemenangnya adalah Andi dari komputer 2 (192.168.1.2), menemukan 9773 error.
 ```
 
 ---
