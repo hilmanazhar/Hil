@@ -41,12 +41,16 @@ Total request per IP:
   38597 192.168.1.1
   38453 192.168.1.2
   38450 192.168.1.3
+```
+(Artinya IP `192.168.1.1` memilliki total request sebanyak `38597`)
+```
 Jumlah setiap status code:
   29087 200
   28896 302
   28882 500
   28635 404
 ```
+(Artinya Jumlah Status Code `200` adalah `29087`)
 ---
 
 ### **(B) Mencari Pengguna Berdasarkan IP & Tanggal dan Membuat Backup Log**
