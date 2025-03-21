@@ -50,10 +50,7 @@ Jumlah setiap status code:
 ---
 
 ### **(B) Mencari Pengguna Berdasarkan IP & Tanggal dan Membuat Backup Log**
-#### **Script: `rudi-b.sh`**
-```bash
-./rudi-b.sh
-```
+
 #### Script `rudi-b.sh`
 ```bash
 #!/bin/bash
@@ -91,6 +88,8 @@ Log Aktivitas Caca telah disimpan di /backup/Caca_01012025_215820.log
 
 ### **(C) Menentukan Pemenang dengan Status Code 500 Terbanyak**
 #### **Script: `rudi-c.sh`**
+
+```bash
 #!/bin/bash
 
 LOG_FILE="access.log"
@@ -111,6 +110,7 @@ nomor_komputer=$(echo "$ip_pemenang" | awk -F'.' '{print $4}')
 pemenang=$(awk -F',' -v komputer="$nomor_komputer" '$2 == komputer {print $3}' "$CSV_FILE" | head -n 1)
 
 echo "Pemenangnya adalah $pemenang dari komputer $nomor_komputer ($ip_pemenang), menemukan $jumlah error."
+```
 
 #### **Penjelasan Code**
 
