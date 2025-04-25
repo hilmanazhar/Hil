@@ -1,4 +1,4 @@
-#task 2 - Organize and Analyze Anthony's Favorite Films
+# task 2 - Organize and Analyze Anthony's Favorite Films
 ## Penjelasan Soal
 Anthony sedang asyik menonton film favoritnya dari Netflix, namun seiring berjalannya waktu, koleksi filmnya semakin menumpuk. Ia pun memutuskan untuk membuat sistem agar film-film favoritnya bisa lebih terorganisir dan mudah diakses. Dalam tugas ini, kami diminta untuk membantu Anthony dengan membuat program C untuk mengorganisir dan menganalisis film-film Netflix favorit Anthony melalui 3 fitur utama:
 
