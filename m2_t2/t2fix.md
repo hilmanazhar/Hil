@@ -155,9 +155,8 @@ Berhasil membaca 5332 film dari file CSV.
 Report berhasil dibuat: report_25042025.txt
 ```
 
-### d. Komponen Pendukung
-#### cara pengerjaan:
-- anthony.c (fungsi readCSVData, createDirectoryIfNotExists, writeLog, cleanFilmData)
+### Fungsi Tambahan
+(fungsi readCSVData, createDirectoryIfNotExists, writeLog, cleanFilmData)
 1. Fungsi `readCSVData()`:
    - Mencari file CSV di berbagai lokasi (direktori saat ini, subfolder extracted)
    - Membaca dan parsing data film dari CSV ke struktur data
@@ -165,31 +164,6 @@ Report berhasil dibuat: report_25042025.txt
 2. Fungsi `createDirectoryIfNotExists()`: Memastikan direktori yang diperlukan tersedia
 3. Fungsi `writeLog()`: Mencatat aktivitas dengan format timestamp yang tepat
 4. Fungsi `cleanFilmData()`: Membersihkan memori yang dialokasikan untuk data film
-
-```c
-FilmData* readCSVData() {
-    FILE* file = NULL;
-    char filepath[300];
-    
-    char cwd[256];
-    if (getcwd(cwd, sizeof(cwd)) != NULL) {
-        printf("Current working directory: %s\n", cwd);
-    }
-    
-    const char* possible_locations[] = {
-        CSV_FILE,                           
-        EXTRACTED_FOLDER "/" CSV_FILE,       
-        "../" CSV_FILE,                     
-        "../" EXTRACTED_FOLDER "/" CSV_FILE,
-        "extracted/" CSV_FILE          
-    };
-    
-    /* Code untuk mencari dan membaca file CSV */
-    
-    printf("Berhasil membaca %d film dari file CSV.\n", data->count);
-    return data;
-}
-```
 
 #### contoh output:
 ```
