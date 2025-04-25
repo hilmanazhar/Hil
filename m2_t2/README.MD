@@ -27,7 +27,6 @@ Anthony sedang menonton film-film favorit dari Netflix, namun koleksinya semakin
 void downloadAndExtract() {
     printf("Mendownload file ZIP dari Google Drive...\n");
     
-    // Using wget to download the file from Google Drive
     char download_cmd[512];
     snprintf(download_cmd, sizeof(download_cmd), "wget -O %s '%s'", ZIP_FILE, ZIP_URL);
     
@@ -41,7 +40,6 @@ void downloadAndExtract() {
     printf("File ZIP berhasil didownload.\n");
     printf("Mengekstrak file ZIP...\n");
     
-    // Extract the ZIP file
     char extract_cmd[256];
     snprintf(extract_cmd, sizeof(extract_cmd), "unzip -o %s", ZIP_FILE);
     
@@ -55,7 +53,6 @@ void downloadAndExtract() {
     printf("File berhasil diekstrak.\n");
     printf("Menghapus file ZIP...\n");
     
-    // Remove the ZIP file
     if (remove(ZIP_FILE) != 0) {
         perror("Gagal menghapus file ZIP");
         return;
@@ -83,11 +80,9 @@ void organizeFilms(FilmData* data) {
     pthread_t thread1, thread2;
     ThreadArgs *args1, *args2;
     
-    // Create log file
     FILE* log_file = fopen("log.txt", "w");
     if (log_file) fclose(log_file);
     
-    // Set up thread arguments
     args1 = (ThreadArgs*)malloc(sizeof(ThreadArgs));
     args1->data = data;
     args1->type = "Abjad";
@@ -96,11 +91,9 @@ void organizeFilms(FilmData* data) {
     args2->data = data;
     args2->type = "Tahun";
     
-    // Create threads
     pthread_create(&thread1, NULL, organizeByFirstLetter, (void*)args1);
     pthread_create(&thread2, NULL, organizeByYear, (void*)args2);
     
-    // Wait for threads to finish
     pthread_join(thread1, NULL);
     pthread_join(thread2, NULL);
     
@@ -124,7 +117,6 @@ void organizeFilms(FilmData* data) {
 
 ```c
 void generateReport(FilmData* data) {
-    // Create report filename with current date
     time_t now;
     struct tm *tm_info;
     char filename[30];
@@ -133,27 +125,19 @@ void generateReport(FilmData* data) {
     tm_info = localtime(&now);
     strftime(filename, 30, "report_%d%m%Y.txt", tm_info);
     
-    // Open report file
     FILE* report_file = fopen(filename, "w");
     if (!report_file) {
         perror("Gagal membuat file report");
         return;
     }
     
-    // Find unique countries and count films
     char countries[1000][MAX_COUNTRY];
     int country_count = 0;
-    
-    // ... [kode untuk menemukan negara unik dan menghitung film] ...
-    
-    // Generate report for each country
+        
     for (int i = 0; i < country_count; i++) {
         int before_2000 = 0;
         int after_2000 = 0;
-        
-        // ... [kode untuk menghitung film sebelum dan setelah tahun 2000] ...
-        
-        // Write to report
+                
         fprintf(report_file, "%d. Negara: %s\n", i+1, countries[i]);
         fprintf(report_file, "Film sebelum 2000: %d\n", before_2000);
         fprintf(report_file, "Film setelah 2000: %d\n\n", after_2000);
