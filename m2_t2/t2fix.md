@@ -10,7 +10,7 @@ Anthony sedang asyik menonton film favoritnya dari Netflix, namun seiring berjal
 
 ### a. One Click and Done!
 #### cara pengerjaan:
-	pertama kita perlu membuat file `.c` bernama anthony.c 
+pertama kita perlu membuat file `.c` bernama anthony.c 
 
 (fungsi downloadAndExtract)
 1. Menggunakan `wget` melalui `popen()` untuk mengunduh file ZIP dari Google Drive.
