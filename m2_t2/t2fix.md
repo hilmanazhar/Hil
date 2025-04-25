@@ -9,7 +9,6 @@ Anthony sedang asyik menonton film favoritnya dari Netflix, namun seiring berjal
 ---
 
 ### a. One Click and Done!
-#### cara pengerjaan:
 pertama kita perlu membuat file `.c` bernama anthony.c 
 
 (fungsi downloadAndExtract)
@@ -55,7 +54,6 @@ File ZIP berhasil dihapus.
 ```
 ---
 ### b. Sorting Like a Pro
-#### cara pengerjaan:
 (fungsi organizeFilms, organizeByFirstLetter, organizeByYear)
 1. Membuat fungsi `organizeFilms()` yang menggunakan multithreading untuk menjalankan dua proses pengorganisasian secara paralel.
 2. Fungsi `organizeByFirstLetter()` mengelompokkan film berdasarkan huruf pertama judulnya:
@@ -109,7 +107,6 @@ Pengorganisasian film selesai.
 ```
 ---
 ### c. The Ultimate Movie Report
-#### cara pengerjaan:
 (fungsi generateReport)
 1. Membuat nama file laporan dengan format report_ddmmyyyy.txt menggunakan `strftime()`.
 2. Menemukan semua negara unik dalam data film dengan algoritma pencarian.
