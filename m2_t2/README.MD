@@ -1,9 +1,10 @@
-Berdasarkan soal awal dan kode anthony.c yang telah kita selesaikan, saya akan membantu menyusun laporan praktikum dengan format serupa dengan contoh yang Anda berikan.
 
 # Laporan Praktikum Sistem Operasi
 
+# task 2 - Organize and Analyze Anthony's Favorite Films
+
 ## Penjelasan Soal
-Anthony sedang menonton film-film favorit dari Netflix, namun koleksinya semakin menumpuk seiring waktu. Dia memutuskan untuk membuat sistem agar film-film tersebut lebih terorganisir dan mudah diakses. Tugas ini bertujuan untuk membuat program C yang dapat membantu Anthony mengelola koleksi filmnya dengan fitur-fitur berikut:
+Anthony sedang menonton film-film favorit dari Netflix, namun koleksinya semakin menumpuk seiring waktu. Dia memutuskan untuk membuat sistem agar film-film tersebut lebih terorganisir dan mudah diakses. Program ini dibuat dengan tujuan untuk membantu Anthony mengelola koleksi filmnya dengan fitur-fitur berikut:
 
 1. **(A) One Click and Done!** - Mengotomatisasi proses download, ekstraksi, dan penghapusan file ZIP data film dengan satu perintah.
 2. **(B) Sorting Like a Pro** - Mengelompokkan film secara paralel berdasarkan huruf pertama dari judul dan tahun rilis menggunakan multiprocessing.
