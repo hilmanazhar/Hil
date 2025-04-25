@@ -170,21 +170,3 @@ void generateReport(FilmData* data) {
   3. **Analisis Statistik**: Untuk setiap negara, menghitung jumlah film yang dirilis sebelum dan setelah tahun 2000.
   4. **Menulis Laporan**: Menyimpan hasilnya dalam file report dengan format yang ditentukan.
 - Laporan memungkinkan Anthony melihat distribusi film berdasarkan negara dan periode waktu.
-
----
-
-## Kesimpulan
-
-Program "Anthony's Netflix Film Manager" berhasil diimplementasikan dengan semua fitur yang diminta. Beberapa poin penting dalam pengembangan:
-
-1. **Penerapan Multithreading**: Program menggunakan thread untuk melakukan pengelompokan film secara paralel, meningkatkan efisiensi.
-2. **Manajemen Memori**: Semua alokasi memori dilakukan dengan hati-hati dan dibersihkan untuk mencegah memory leak.
-3. **Penanganan File**: Program dapat menangani berbagai lokasi file CSV (termasuk dalam subfolder) dan berbagai jenis karakter dalam judul film.
-4. **Logging**: Implementasi logging yang komprehensif untuk memantau proses pengelompokan film.
-
-Program ini merupakan solusi efektif untuk masalah Anthony dalam mengelola koleksi filmnya, dengan antarmuka command-line yang sederhana namun kuat, yang memungkinkan:
-- Download dan ekstraksi data film dengan satu perintah
-- Pengorganisasian film berdasarkan berbagai kriteria secara simultan
-- Analisis statistik untuk wawasan lebih dalam tentang koleksi film
-
-Dengan program ini, Anthony dapat dengan mudah menemukan, mengakses, dan menganalisis film-film dalam koleksinya yang semakin bertambah.
