@@ -53,7 +53,7 @@ File berhasil diekstrak.
 Menghapus file ZIP...
 File ZIP berhasil dihapus.
 ```
-
+---
 ### b. Sorting Like a Pro
 #### cara pengerjaan:
 (fungsi organizeFilms, organizeByFirstLetter, organizeByYear)
@@ -107,7 +107,7 @@ Pengorganisasian berdasarkan huruf pertama selesai.
 Pengorganisasian berdasarkan tahun selesai.
 Pengorganisasian film selesai.
 ```
-
+---
 ### c. The Ultimate Movie Report
 #### cara pengerjaan:
 (fungsi generateReport)
@@ -154,7 +154,7 @@ File ditemukan di: netflixData.csv
 Berhasil membaca 5332 film dari file CSV.
 Report berhasil dibuat: report_25042025.txt
 ```
-
+---
 ### Fungsi Tambahan
 (fungsi readCSVData, createDirectoryIfNotExists, writeLog, cleanFilmData)
 1. Fungsi `readCSVData()`:
