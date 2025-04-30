@@ -33,7 +33,50 @@ void downloadAndExtract() {
     pclose(download_pipe);
     
     printf("File ZIP berhasil didownload.\n");
-    /* Code lainnya untuk ekstraksi dan penghapusan file ZIP */
+    
+    if (access(ZIP_FILE, F_OK) != 0) {
+        printf("Error: File ZIP tidak ditemukan setelah download.\n");
+        return;
+    }
+    
+    printf("Mengekstrak file ZIP...\n");
+    
+    char extract_cmd[512];
+    char output[4096];
+    
+    snprintf(extract_cmd, sizeof(extract_cmd), "unzip -o %s", ZIP_FILE);
+    
+    FILE* extract_pipe = popen(extract_cmd, "r");
+    if (!extract_pipe) {
+        perror("Gagal mengekstrak file");
+        return;
+    }
+    
+    while (fgets(output, sizeof(output), extract_pipe) != NULL) {
+        printf("%s", output);
+    }
+    
+    pclose(extract_pipe);
+    
+    printf("File berhasil diekstrak.\n");
+    
+    listFilesInDirectory(".");
+    
+    struct stat st = {0};
+    if (stat(EXTRACTED_FOLDER, &st) == 0) {
+        listFilesInDirectory(EXTRACTED_FOLDER);
+    } else {
+        printf("Folder '%s' tidak ditemukan setelah ekstraksi.\n", EXTRACTED_FOLDER);
+    }
+    
+    printf("Menghapus file ZIP...\n");
+    
+    if (remove(ZIP_FILE) != 0) {
+        perror("Gagal menghapus file ZIP");
+        return;
+    }
+    
+    printf("File ZIP berhasil dihapus.\n");
 }
 ```
 
