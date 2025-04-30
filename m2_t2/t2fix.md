@@ -174,8 +174,44 @@ void generateReport(FilmData* data) {
         return;
     }
     
-    /* Code untuk menemukan negara unik dan menghitung film */
+    char countries[1000][MAX_COUNTRY];
+    int country_count = 0;
     
+    for (int i = 0; i < data->count; i++) {
+        int found = 0;
+        for (int j = 0; j < country_count; j++) {
+            if (strcmp(data->films[i].country, countries[j]) == 0) {
+                found = 1;
+                break;
+            }
+        }
+        
+        if (!found) {
+            strcpy(countries[country_count], data->films[i].country);
+            country_count++;
+        }
+    }
+    
+    for (int i = 0; i < country_count; i++) {
+        int before_2000 = 0;
+        int after_2000 = 0;
+        
+        for (int j = 0; j < data->count; j++) {
+            if (strcmp(data->films[j].country, countries[i]) == 0) {
+                if (data->films[j].release_year < 2000) {
+                    before_2000++;
+                } else {
+                    after_2000++;
+                }
+            }
+        }
+        
+        fprintf(report_file, "%d. Negara: %s\n", i+1, countries[i]);
+        fprintf(report_file, "Film sebelum 2000: %d\n", before_2000);
+        fprintf(report_file, "Film setelah 2000: %d\n\n", after_2000);
+    }
+    
+    fclose(report_file);
     printf("Report berhasil dibuat: %s\n", filename);
 }
 ```
