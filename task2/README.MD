@@ -238,46 +238,43 @@ _At last, the OS you painstakingly created was submitted to the lecturer under B
 
 ## Soal 4: Membuat Superuser dan Membatasi Akses Pengguna
 
-### **Instruksi:**
-Dosen meminta Budiman membuat sistem operasi ini memiliki **superuser** layaknya sistem operasi pada umumnya. User root yang sudah kamu buat sebelumnya akan digunakan sebagai superuser dalam sistem operasi milik Budiman. Superuser yang dimaksud adalah user dengan otoritas penuh yang dapat mengakses seluruhnya. Akan tetapi user lain tidak boleh memiliki otoritas yang sama. Dengan begitu user-user selain root tidak boleh mengakses `./root`. Buatlah sehingga tiap user selain superuser tidak dapat mengakses `./root`!
+> Dosen meminta Budiman membuat sistem operasi ini memilki **superuser** layaknya sistem operasi pada umumnya. User root yang sudah kamu buat sebelumnya akan digunakan sebagai superuser dalam sistem operasi milik Budiman. Superuser yang dimaksud adalah user dengan otoritas penuh yang dapat mengakses seluruhnya. Akan tetapi user lain tidak boleh memiliki otoritas yang sama. Dengan begitu user-user selain root tidak boleh mengakses `./root`. Buatlah sehingga tiap user selain superuser tidak dapat mengakses `./root`!
 
-### **Langkah-langkah Penyelesaian:**
+### **Langkah-langkah :**
 1. **Masuk ke Direktori `myramdisk`**
-   - Pastikan Anda berada di direktori `myramdisk` yang berisi direktori `home` untuk setiap pengguna.
+   - Pastikan Anda berada di direktori `myramdisk` yang isinya ada folder `home` untuk tiap user.
 
 2. **Buat Direktori `root`**
-   - Direktori `/home/root` dibuat menggunakan perintah:
      ```bash
      sudo mkdir -p /home/root
      ```
 
-3. **Setel Izin untuk Direktori `/home/root`**
-   - Setelah membuat direktori `root`, atur izin akses untuk hanya `root` yang bisa mengaksesnya:
+3. **Atur Hak Akses Folder `/home/root`**
+   - Setelah folder `root` dibuat, atur supaya hanya user root yang bisa akses:
      ```bash
      sudo chmod 700 /home/root
      ```
 
-4. **Verifikasi Akses**
-   - Verifikasi akses direktori `/home/root` untuk pengguna selain `root` dengan mencoba masuk ke direktori tersebut:
+4. **Cek Akses dari Pengguna Lain**
+   - Coba login sebagai user lain dan akses `/home/root`:
      ```bash
      sudo su - Budiman
      cd /home/root
      ```
-     Pengguna selain `root` akan menerima pesan "Permission denied".
+     Harusnya muncul pesan "Permission denied" karena user tersebut bukan root.
 
 ---
 
 ## Soal 5: Membatasi Akses Pengguna ke Direktori Lain
 
-### **Instruksi:**
-Setiap user rencananya akan digunakan oleh satu orang tertentu. **Privasi dan otoritas tiap user** merupakan hal penting. Oleh karena itu, Budiman ingin membuat setiap user hanya bisa mengakses dirinya sendiri dan tidak bisa mengakses user lain. Buatlah sehingga sistem operasi Budiman dalam melakukan hal tersebut!
+> Setiap user rencananya akan digunakan oleh satu orang tertentu. **Privasi dan otoritas tiap user** merupakan hal penting. Oleh karena itu, Budiman ingin membuat setiap user hanya bisa mengakses dirinya sendiri dan tidak bisa mengakses user lain. Buatlah sehingga sistem operasi Budiman dalam melakukan hal tersebut!
 
-### **Langkah-langkah Penyelesaian:**
+### **Langkah-langkah :**
 1. **Masuk ke Direktori `myramdisk`**
-   - Pastikan Anda berada di dalam direktori `myramdisk`.
+   - Pastikan kamu ada di dalam folder  `myramdisk`.
 
-2. **Setel Izin untuk Direktori Home Pengguna**
-   - Atur izin **700** pada direktori home masing-masing pengguna agar hanya pemilik yang dapat mengakses direktori mereka sendiri:
+2. **Atur Hak Akses Folder Home**
+   - Setel permission folder home masing-masing user ke `700`, biar cuma pemilik folder yang bisa buka:
      ```bash
      sudo chmod 700 /home/root
      sudo chmod 700 /home/Budiman
@@ -286,41 +283,47 @@ Setiap user rencananya akan digunakan oleh satu orang tertentu. **Privasi dan ot
      sudo chmod 700 /home/praktikan2
      ```
 
-3. **Verifikasi Akses Pengguna Lain**
-   - Uji coba akses ke direktori home pengguna lain. Misalnya, login sebagai `Budiman` dan coba akses `/home/guest`:
+3. **Uji Akses antar User**
+   - Coba login sebagai Budiman dan akses folder user lain:
      ```bash
      sudo -u Budiman -i
      cd /home/guest
      ```
-     Anda harus menerima pesan "Permission denied", yang menunjukkan bahwa pengguna lain tidak dapat mengakses direktori pengguna lainnya.
+     Harusnya muncul "Permission denied", yang artinya folder tersebut gak bisa diakses.
 
 ---
 
 ## Soal 6: Menambahkan Banner dengan ASCII Art
 
-### **Instruksi:**
-Dosen Budiman menginginkan sistem operasi yang **stylish**. Budiman memiliki ide untuk membuat sistem operasinya menjadi stylish. Ia meminta kamu untuk menambahkan tampilan sebuah banner yang ditampilkan setelah suatu user login ke dalam sistem operasi Budiman. Banner yang diinginkan Budiman adalah tulisan `"Welcome to OS'25"` dalam bentuk **ASCII Art**. Buatkanlah banner tersebut supaya Budiman senang! (Hint: gunakan text to ASCII Art Generator)
+> Dosen Budiman menginginkan sistem operasi yang **stylish**. Budiman memiliki ide untuk membuat sistem operasinya menjadi stylish. Ia meminta kamu untuk menambahkan tampilan sebuah banner yang ditampilkan setelah suatu user login ke dalam sistem operasi Budiman. Banner yang diinginkan Budiman adalah tulisan `"Welcome to OS'25"` dalam bentuk **ASCII Art**. Buatkanlah banner tersebut supaya Budiman senang! (Hint: gunakan text to ASCII Art Generator)
 
-### **Langkah-langkah Penyelesaian:**
+### **Langkah-langkah :**
 1. **Menggunakan Generator ASCII Art**
    - Kunjungi situs seperti [Patorjk's Text to ASCII Art Generator](https://patorjk.com/software/taag/) dan masukkan teks "Welcome to OS'25".
    - Pilih gaya ASCII Art dan salin hasilnya.
+  atau
+   - install `figlet` dengan cara :
+      ```bash
+      sudo apt update
+      sudo apt install figlet
+      ```
 
-2. **Tambahkan Banner ke `.bashrc`**
-   - Buka file `.bashrc` untuk pengguna (misalnya, `root`, `Budiman`, dll.) dengan editor teks:
+
+2. **Masukkan Banner ke `.bashrc`**
+   - Buka file `.bashrc` untuk pengguna (misalnya, `root`, `Budiman`, dll.) pakai editor teks:
      ```bash
      sudo nano /home/Budiman/.bashrc
      ```
 
-   - Tambahkan hasil ASCII Art di bagian bawah file `.bashrc`:
+   - Tambahkan ASCII Art di bagian bawah file `.bashrc`:
      ```bash
      echo "Welcome to OS'25" | figlet
      ```
 
    - Simpan dan keluar dari editor teks.
 
-3. **Verifikasi Banner**
-   - Setelah menambahkan banner, keluar dari sesi terminal dan login kembali. Banner akan muncul setelah login.
+3. **Cek Banner Saat Login**
+   - Keluar dari terminal, lalu login lagi sebagai user untuk lihat bannernya muncul:
 
    ```bash
    exit
