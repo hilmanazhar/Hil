@@ -1,149 +1,230 @@
-# Laporan Praktikum Sistem Operasi
-
-
-## Penjelasan soal
-Rudi membuat website untuk personal branding yang berjalan secara lokal di komputer laboratorium. Karena sering mengalami error, ia meminta bantuan tiga temannya: Andi, Budi, dan Caca untuk mengecek log aksesnya. Praktikum ini bertujuan untuk menganalisis file `access.log` dan `peminjaman_computer.csv` untuk mendapatkan informasi berikut:
-
-1. **(A)** Total request dari setiap IP dan jumlah setiap status code.
-2. **(B)** Mencari pengguna komputer berdasarkan tanggal dan IP serta menyimpan log aktivitas.
-3. **(C)** Menemukan siapa yang menemukan error `Status Code 500` terbanyak dan menentukan pemenang hadiah.
-
----
-
-## Langkah-langkah Pengerjaan
-
-### Data yang perlu disiapkan
-- Download file yang dibutuhkan:
-  - `access.log` (log akses dari website Rudi)
-  - `peminjaman_computer.csv` (data peminjaman komputer)
-- Pastikan kedua file disimpan dalam direktori yang akan digunakan.
-- Tiga file script Bash yang akan dibuat :
-  - `rudi-a.sh` → Untuk analisis total request dan status code.
-  - `rudi-b.sh` → Untuk mencari pengguna komputer dan menyimpan log aktivitas.
-  - `rudi-c.sh` → Untuk menentukan pemenang berdasarkan status code `500`.
----
-### **(A) Menampilkan Total Request per IP & Jumlah Status Code**
-#### **Script: `rudi-a.sh`**
-```bash
-#!/bin/bash
-awk '{print $1}' access.log | sort | uniq -c | sort -nr > ip_count.txt
-awk '{print $9}' access.log | sort | uniq -c | sort -nr > status_count.txt
-echo "Total request per IP:"
-cat ip_count.txt
-echo "Jumlah setiap status code:"
-cat status_count.txt
-```
-#### **Penjelasan Code**
-
-#### **Output Contoh:**
-```
-Total request per IP:
-  38597 192.168.1.1
-  38453 192.168.1.2
-  38450 192.168.1.3
-```
-(Artinya IP `192.168.1.1` memilliki total request sebanyak `38597`)
-```
-Jumlah setiap status code:
-  29087 200
-  28896 302
-  28882 500
-  28635 404
-```
-(Artinya Jumlah Status Code `200` adalah `29087`)
----
-
-### **(B) Mencari Pengguna Berdasarkan IP & Tanggal dan Membuat Backup Log**
-
-#### Script `rudi-b.sh`
-```bash
-#!/bin/bash
-echo -n "Masukkan Tanggal (MM/DD/YYYY): "
-read date
-echo -n "Masukkan IP Address (192.168.1.X): "
-read ip
-
-user=$(awk -F, -v date="$date" -v ip="$ip" '$1==date && $2==ip {print $3}' peminjaman_computer.csv)
-
-if [ -z "$user" ]; then
-    echo "Data yang kamu cari tidak ada"
-    exit 1
-fi
-
-echo "Pengguna saat itu adalah $user"
-
-mkdir -p /backup
-log_file="/backup/${user}_$(echo $date | tr -d '/')_$(date +%H%M%S).log"
-grep "$ip" access.log | awk '{print $4 " " $6 " " $7 " " $9}' > "$log_file"
-echo "Log Aktivitas $user telah disimpan di $log_file"
-```
-
-#### **Penjelasan Code**
-
-
-#### **Output Contoh:**
-```
-Masukkan Tanggal (MM/DD/YYYY): 01/01/2025
-Masukkan IP Address (192.168.1.3): 3
-Pengguna saat itu adalah Caca
-Log Aktivitas Caca telah disimpan di /backup/Caca_01012025_215820.log
-```
----
-
-### **(C) Menentukan Pemenang dengan Status Code 500 Terbanyak**
-#### **Script: `rudi-c.sh`**
-
-```bash
-#!/bin/bash
-
-LOG_FILE="access.log"
-CSV_FILE="peminjaman_computer.csv"
-
-echo "Siapa yang menemukan error Status Code 500 terbanyak?"
-
-# Hitung jumlah Status Code 500 per IP
-top_ip=$(grep " 500 " "$LOG_FILE" | awk '{print $1}' | sort | uniq -c | sort -nr | head -n 1)
-
-jumlah=$(echo "$top_ip" | awk '{print $1}')
-ip_pemenang=$(echo "$top_ip" | awk '{print $2}')
-
-# Konversi IP ke nomor komputer
-nomor_komputer=$(echo "$ip_pemenang" | awk -F'.' '{print $4}')
-
-# Cari pengguna berdasarkan nomor komputer
-pemenang=$(awk -F',' -v komputer="$nomor_komputer" '$2 == komputer {print $3}' "$CSV_FILE" | head -n 1)
-
-echo "Pemenangnya adalah $pemenang dari komputer $nomor_komputer ($ip_pemenang), menemukan $jumlah error."
-```
-
-#### **Penjelasan Code**
-
-#### **Output Contoh:**
-```
-Siapa yang menemukan error Status Code 500 terbanyak?
-Pemenangnya adalah Andi dari komputer 2 (192.168.1.2), menemukan 9773 error.
-```
-
----
-
-## Kesimpulan
-
-**Total Request per IP:**
-|    IP     |      Jumlah Request      |
+[![Review Assignment Due Date](https://classroom.github.com/assets/deadline-readme-button-22041afd0340ce965d47ae6ef1cefeee28c7c493a6346c4f15d667ab976d596c.svg)](https://classroom.github.com/a/Eu-CByJh)
+|    NRP     |      Name      |
 | :--------: | :------------: |
-| 192.168.1.2 | 35 request |
-| 192.168.1.3 | 28 request |
-| 192.168.1.1 | 25 request |
+| 5025231258 | M. Rizal Febrianto |
+| 5025241264 | Muhammad Hilman Azhar |
+| 5025241265 | A. Wildan Kevin Assyauqi |
 
-**Jumlah Status Code:**
-|    Status Code     |      Jumlah      |
-| :--------: | :------------: |
-| 200 | 29087 |
-| 302 | 28896 |
-| 500 | 28882 |
-| 404 | 28635 |
+# Praktikum Modul 3 _(Module 3 Lab Work)_
 
+### Laporan Resmi Praktikum Modul 3 _(Module 3 Lab Work Report)_
 
+Di suatu pagi hari yang cerah, Budiman salah satu mahasiswa Informatika ditugaskan oleh dosennya untuk membuat suatu sistem operasi sederhana. Akan tetapi karena Budiman memiliki keterbatasan, Ia meminta tolong kepadamu untuk membantunya dalam mengerjakan tugasnya. Bantulah Budiman untuk membuat sistem operasi sederhana!
 
-Dengan menggunakan script Bash, kita dapat dengan mudah menganalisis file log dan melakukan berbagai pemrosesan data secara otomatis. Script ini membantu Rudi dalam mengelola data akses websitenya dengan lebih efisien.
+_One sunny morning, Budiman, an Informatics student, was assigned by his lecturer to create a simple operating system. However, due to Budiman's limitations, he asks for your help to assist him in completing his assignment. Help Budiman create a simple operating system!_
 
+### Soal 1
+
+> Sebelum membuat sistem operasi, Budiman diberitahu dosennya bahwa Ia harus melakukan beberapa tahap terlebih dahulu. Tahap-tahapan yang dimaksud adalah untuk **mempersiapkan seluruh prasyarat** dan **melakukan instalasi-instalasi** sebelum membuat sistem operasi. Lakukan seluruh tahapan prasyarat hingga [perintah ini](https://github.com/arsitektur-jaringan-komputer/Modul-Sisop/blob/master/Modul3/README-ID.md#:~:text=sudo%20apt%20install%20%2Dy%20busybox%2Dstatic) pada modul!
+
+> _Before creating the OS, Budiman was informed by his lecturer that he must complete several steps first. The steps include **preparing all prerequisites** and **installing** before creating the OS. Complete all the prerequisite steps up to [this command](https://github.com/arsitektur-jaringan-komputer/Modul-Sisop/blob/master/Modul3/README-ID.md#:~:text=sudo%20apt%20install%20%2Dy%20busybox%2Dstatic) in the module!_
+
+**Answer:**
+
+- **Code:**
+
+  `put your answer here`
+
+- **Explanation:**
+
+  `put your answer here`
+
+- **Screenshot:**
+
+  `put your answer here`
+
+### Soal 2
+
+> Setelah seluruh prasyarat siap, Budiman siap untuk membuat sistem operasinya. Dosen meminta untuk sistem operasi Budiman harus memiliki directory **bin, dev, proc, sys, tmp,** dan **sisop**. Lagi-lagi Budiman meminta bantuanmu. Bantulah Ia dalam membuat directory tersebut!
+
+> _Once all prerequisites are ready, Budiman is ready to create his OS. The lecturer asks that the OS should contain the directories **bin, dev, proc, sys, tmp,** and **sisop**. Help Budiman create these directories!_
+
+**Answer:**
+
+- **Code:**
+
+  `put your answer here`
+
+- **Explanation:**
+
+  `put your answer here`
+
+- **Screenshot:**
+
+  `put your answer here`
+
+### Soal 3
+
+> Budiman lupa, Ia harus membuat sistem operasi ini dengan sistem **Multi User** sesuai permintaan Dosennya. Ia meminta kembali kepadamu untuk membantunya membuat beberapa user beserta directory tiap usernya dibawah directory `home`. Buat pula password tiap user-usernya dan aplikasikan dalam sistem operasi tersebut!
+
+> _Budiman forgot that he needs to create a **Multi User** system as requested by the lecturer. He asks your help again to create several users and their corresponding home directories under the `home` directory. Also set each user's password and apply them in the OS!_
+
+**Format:** `user:pass`
+
+```
+root:Iniroot
+Budiman:PassBudi
+guest:guest
+praktikan1:praktikan1
+praktikan2:praktikan2
+```
+
+**Answer:**
+
+- **Code:**
+
+  `put your answer here`
+
+- **Explanation:**
+
+  `put your answer here`
+
+- **Screenshot:**
+
+  `put your answer here`
+
+### Soal 4
+
+> Dosen meminta Budiman membuat sistem operasi ini memilki **superuser** layaknya sistem operasi pada umumnya. User root yang sudah kamu buat sebelumnya akan digunakan sebagai superuser dalam sistem operasi milik Budiman. Superuser yang dimaksud adalah user dengan otoritas penuh yang dapat mengakses seluruhnya. Akan tetapi user lain tidak boleh memiliki otoritas yang sama. Dengan begitu user-user selain root tidak boleh mengakses `./root`. Buatlah sehingga tiap user selain superuser tidak dapat mengakses `./root`!
+
+> _The lecturer requests that the OS must have a **superuser** just like other operating systems. The root user created earlier will serve as the superuser in Budiman's OS. The superuser should have full authority to access everything. However, other users should not have the same authority. Therefore, users other than root should not be able to access `./root`. Implement this so that non-superuser accounts cannot access `./root`!_
+
+**Answer:**
+
+- **Code:**
+
+  `put your answer here`
+
+- **Explanation:**
+
+  `put your answer here`
+
+- **Screenshot:**
+
+  `put your answer here`
+
+### Soal 5
+
+> Setiap user rencananya akan digunakan oleh satu orang tertentu. **Privasi dan otoritas tiap user** merupakan hal penting. Oleh karena itu, Budiman ingin membuat setiap user hanya bisa mengakses dirinya sendiri dan tidak bisa mengakses user lain. Buatlah sehingga sistem operasi Budiman dalam melakukan hal tersebut!
+
+> _Each user is intended for an individual. **Privacy and authority** for each user are important. Therefore, Budiman wants to ensure that each user can only access their own files and not those of others. Implement this in Budiman's OS!_
+
+**Answer:**
+
+- **Code:**
+
+  `put your answer here`
+
+- **Explanation:**
+
+  `put your answer here`
+
+- **Screenshot:**
+
+  `put your answer here`
+
+### Soal 6
+
+> Dosen Budiman menginginkan sistem operasi yang **stylish**. Budiman memiliki ide untuk membuat sistem operasinya menjadi stylish. Ia meminta kamu untuk menambahkan tampilan sebuah banner yang ditampilkan setelah suatu user login ke dalam sistem operasi Budiman. Banner yang diinginkan Budiman adalah tulisan `"Welcome to OS'25"` dalam bentuk **ASCII Art**. Buatkanlah banner tersebut supaya Budiman senang! (Hint: gunakan text to ASCII Art Generator)
+
+> _Budiman wants a **stylish** operating system. Budiman has an idea to make his OS stylish. He asks you to add a banner that appears after a user logs in. The banner should say `"Welcome to OS'25"` in **ASCII Art**. Use a text to ASCII Art generator to make Budiman happy!_ (Hint: use a text to ASCII Art generator)
+
+**Answer:**
+
+- **Code:**
+
+  `put your answer here`
+
+- **Explanation:**
+
+  `put your answer here`
+
+- **Screenshot:**
+
+  `put your answer here`
+
+### Soal 7
+
+> Melihat perkembangan sistem operasi milik Budiman, Dosen kagum dengan adanya banner yang telah kamu buat sebelumnya. Kemudian Dosen juga menginginkan sistem operasi Budiman untuk dapat menampilkan **kata sambutan** dengan menyebut nama user yang login. Sambutan yang dimaksud berupa kalimat `"Helloo %USER"` dengan `%USER` merupakan nama user yang sedang menggunakan sistem operasi. Kalimat sambutan ini ditampilkan setelah user login dan setelah banner. Budiman kembali lagi meminta bantuanmu dalam menambahkan fitur ini.
+
+> _Seeing the progress of Budiman's OS, the lecturer is impressed with the banner you created. The lecturer also wants the OS to display a **greeting message** that includes the name of the user who logs in. The greeting should say `"Helloo %USER"` where `%USER` is the name of the user currently using the OS. This greeting should be displayed after user login and after the banner. Budiman asks for your help again to add this feature._
+
+**Answer:**
+
+- **Code:**
+
+  `put your answer here`
+
+- **Explanation:**
+
+  `put your answer here`
+
+- **Screenshot:**
+
+  `put your answer here`
+
+### Soal 8
+
+> Dosen Budiman sudah tua sekali, sehingga beliau memiliki kesulitan untuk melihat tampilan terminal default. Budiman menginisiatif untuk membuat tampilan sistem operasi menjadi seperti terminal milikmu. Modifikasilah sistem operasi Budiman menjadi menggunakan tampilan terminal kalian.
+
+> _Budiman's lecturer is quite old and has difficulty seeing the default terminal display. Budiman takes the initiative to make the OS look like your terminal. Modify Budiman's OS to use your terminal appearance!_
+
+**Answer:**
+
+- **Code:**
+
+  `put your answer here`
+
+- **Explanation:**
+
+  `put your answer here`
+
+- **Screenshot:**
+
+  `put your answer here`
+
+### Soal 9
+
+> Ketika mencoba sistem operasi buatanmu, Budiman tidak bisa mengubah text file menggunakan text editor. Budiman pun menyadari bahwa dalam sistem operasi yang kamu buat tidak memiliki text editor. Budimanpun menyuruhmu untuk menambahkan **binary** yang telah disiapkan sebelumnya ke dalam sistem operasinya. Buatlah sehingga sistem operasi Budiman memiliki **binary text editor** yang telah disiapkan!
+
+> _When trying your OS, Budiman cannot edit text files using a text editor. He realizes that the OS you created does not have a text editor. Budiman asks you to add the prepared **binary** into his OS. Make sure Budiman's OS has the prepared **text editor binary**!_
+
+**Answer:**
+
+- **Code:**
+
+  `put your answer here`
+
+- **Explanation:**
+
+  `put your answer here`
+
+- **Screenshot:**
+
+  `put your answer here`
+
+### Soal 10
+
+> Setelah seluruh fitur yang diminta Dosen dipenuhi dalam sistem operasi Budiman, sudah waktunya Budiman mengumpulkan tugasnya ini ke Dosen. Akan tetapi, Dosen Budiman tidak mau menerima pengumpulan selain dalam bentuk **.iso**. Untuk terakhir kalinya, Budiman meminta tolong kepadamu untuk mengubah seluruh konfigurasi sistem operasi yang telah kamu buat menjadi sebuah **file .iso**.
+
+> After all the features requested by the lecturer have been implemented in Budiman's OS, it's time for Budiman to submit his assignment. However, Budiman's lecturer only accepts submissions in the form of **.iso** files. For the last time, Budiman asks for your help to convert the entire configuration of the OS you created into a **.iso file**.
+
+**Answer:**
+
+- **Code:**
+
+  `put your answer here`
+
+- **Explanation:**
+
+  `put your answer here`
+
+- **Screenshot:**
+
+  `put your answer here`
+
+---
+
+Pada akhirnya sistem operasi Budiman yang telah kamu buat dengan susah payah dikumpulkan ke Dosen mengatasnamakan Budiman. Kamu tidak diberikan credit apapun. Budiman pun tidak memberikan kata terimakasih kepadamu. Kamupun kecewa tetapi setidaknya kamu telah belajar untuk menjadi pembuat sistem operasi sederhana yang andal. Selamat!
+
+_At last, the OS you painstakingly created was submitted to the lecturer under Budiman's name. You received no credit. Budiman didn't even thank you. You feel disappointed, but at least you've learned to become a reliable creator of simple operating systems. Congratulations!_
