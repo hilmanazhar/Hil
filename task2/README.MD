@@ -228,3 +228,100 @@ praktikan2:praktikan2
 Pada akhirnya sistem operasi Budiman yang telah kamu buat dengan susah payah dikumpulkan ke Dosen mengatasnamakan Budiman. Kamu tidak diberikan credit apapun. Budiman pun tidak memberikan kata terimakasih kepadamu. Kamupun kecewa tetapi setidaknya kamu telah belajar untuk menjadi pembuat sistem operasi sederhana yang andal. Selamat!
 
 _At last, the OS you painstakingly created was submitted to the lecturer under Budiman's name. You received no credit. Budiman didn't even thank you. You feel disappointed, but at least you've learned to become a reliable creator of simple operating systems. Congratulations!_
+
+
+
+---
+
+
+# Laporan Praktikum Modul 3 - Soal 4 hingga Soal 6
+
+## Soal 4: Membuat Superuser dan Membatasi Akses Pengguna
+
+### **Instruksi:**
+Dosen meminta Budiman membuat sistem operasi ini memiliki **superuser** layaknya sistem operasi pada umumnya. User root yang sudah kamu buat sebelumnya akan digunakan sebagai superuser dalam sistem operasi milik Budiman. Superuser yang dimaksud adalah user dengan otoritas penuh yang dapat mengakses seluruhnya. Akan tetapi user lain tidak boleh memiliki otoritas yang sama. Dengan begitu user-user selain root tidak boleh mengakses `./root`. Buatlah sehingga tiap user selain superuser tidak dapat mengakses `./root`!
+
+### **Langkah-langkah Penyelesaian:**
+1. **Masuk ke Direktori `myramdisk`**
+   - Pastikan Anda berada di direktori `myramdisk` yang berisi direktori `home` untuk setiap pengguna.
+
+2. **Buat Direktori `root`**
+   - Direktori `/home/root` dibuat menggunakan perintah:
+     ```bash
+     sudo mkdir -p /home/root
+     ```
+
+3. **Setel Izin untuk Direktori `/home/root`**
+   - Setelah membuat direktori `root`, atur izin akses untuk hanya `root` yang bisa mengaksesnya:
+     ```bash
+     sudo chmod 700 /home/root
+     ```
+
+4. **Verifikasi Akses**
+   - Verifikasi akses direktori `/home/root` untuk pengguna selain `root` dengan mencoba masuk ke direktori tersebut:
+     ```bash
+     sudo su - Budiman
+     cd /home/root
+     ```
+     Pengguna selain `root` akan menerima pesan "Permission denied".
+
+---
+
+## Soal 5: Membatasi Akses Pengguna ke Direktori Lain
+
+### **Instruksi:**
+Setiap user rencananya akan digunakan oleh satu orang tertentu. **Privasi dan otoritas tiap user** merupakan hal penting. Oleh karena itu, Budiman ingin membuat setiap user hanya bisa mengakses dirinya sendiri dan tidak bisa mengakses user lain. Buatlah sehingga sistem operasi Budiman dalam melakukan hal tersebut!
+
+### **Langkah-langkah Penyelesaian:**
+1. **Masuk ke Direktori `myramdisk`**
+   - Pastikan Anda berada di dalam direktori `myramdisk`.
+
+2. **Setel Izin untuk Direktori Home Pengguna**
+   - Atur izin **700** pada direktori home masing-masing pengguna agar hanya pemilik yang dapat mengakses direktori mereka sendiri:
+     ```bash
+     sudo chmod 700 /home/root
+     sudo chmod 700 /home/Budiman
+     sudo chmod 700 /home/guest
+     sudo chmod 700 /home/praktikan1
+     sudo chmod 700 /home/praktikan2
+     ```
+
+3. **Verifikasi Akses Pengguna Lain**
+   - Uji coba akses ke direktori home pengguna lain. Misalnya, login sebagai `Budiman` dan coba akses `/home/guest`:
+     ```bash
+     sudo -u Budiman -i
+     cd /home/guest
+     ```
+     Anda harus menerima pesan "Permission denied", yang menunjukkan bahwa pengguna lain tidak dapat mengakses direktori pengguna lainnya.
+
+---
+
+## Soal 6: Menambahkan Banner dengan ASCII Art
+
+### **Instruksi:**
+Dosen Budiman menginginkan sistem operasi yang **stylish**. Budiman memiliki ide untuk membuat sistem operasinya menjadi stylish. Ia meminta kamu untuk menambahkan tampilan sebuah banner yang ditampilkan setelah suatu user login ke dalam sistem operasi Budiman. Banner yang diinginkan Budiman adalah tulisan `"Welcome to OS'25"` dalam bentuk **ASCII Art**. Buatkanlah banner tersebut supaya Budiman senang! (Hint: gunakan text to ASCII Art Generator)
+
+### **Langkah-langkah Penyelesaian:**
+1. **Menggunakan Generator ASCII Art**
+   - Kunjungi situs seperti [Patorjk's Text to ASCII Art Generator](https://patorjk.com/software/taag/) dan masukkan teks "Welcome to OS'25".
+   - Pilih gaya ASCII Art dan salin hasilnya.
+
+2. **Tambahkan Banner ke `.bashrc`**
+   - Buka file `.bashrc` untuk pengguna (misalnya, `root`, `Budiman`, dll.) dengan editor teks:
+     ```bash
+     sudo nano /home/Budiman/.bashrc
+     ```
+
+   - Tambahkan hasil ASCII Art di bagian bawah file `.bashrc`:
+     ```bash
+     echo "Welcome to OS'25" | figlet
+     ```
+
+   - Simpan dan keluar dari editor teks.
+
+3. **Verifikasi Banner**
+   - Setelah menambahkan banner, keluar dari sesi terminal dan login kembali. Banner akan muncul setelah login.
+
+   ```bash
+   exit
+   su - Budiman
