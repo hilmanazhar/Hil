@@ -173,13 +173,13 @@ praktikan2:praktikan2
 
 - *Code:*
 
-  
+  ```
   sudo bash
   cd myramdisk/
   
   chown root:root /root
   chmod 700 /root
-  
+  ```
 
 - *Explanation:*
 
@@ -214,7 +214,7 @@ praktikan2:praktikan2
 
 - *Code:*
 
-  
+  ```
   sudo bash
 
   cd myramdisk/home/
@@ -228,7 +228,7 @@ praktikan2:praktikan2
   chmod 700 /home/guest
   chmod 700 /home/praktikan1
   chmod 700 /home/praktikan2
-
+  ```
     
 
 - *Explanation:*
@@ -240,7 +240,7 @@ praktikan2:praktikan2
 
 3. Atur Hak Akses Folder Home
     - Setel permission folder home masing-masing user ke 700, biar cuma pemilik folder yang bisa buka:
-
+   ```
      chown 1001:100 /Budiman 
      chown 1002:100 /gues
      chown 1003:100 /praktikan1
@@ -250,7 +250,7 @@ praktikan2:praktikan2
      chmod 700 /guest
      chmod 700 /praktikan1
      chmod 700 /praktikan2
-     
+     ```
 
 3. Uji Akses antar User
     - Coba login sebagai Budiman dan akses folder user lain:
@@ -272,14 +272,14 @@ praktikan2:praktikan2
 
 - *Code:*
 
-  
+  ```
   apt update
   apt install figlet
 
   nano /home/Budiman/.bashrc
 
   echo "Welcome to OS'25" | figlet
-  
+  ```
 
 - *Explanation:*
 
